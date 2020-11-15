@@ -1,6 +1,5 @@
 package com.javen.controller;
 
-
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -107,11 +106,11 @@ public class LoginController {
     @ResponseBody
     @RequestMapping(value="/selectAll", method=RequestMethod.GET,produces = "text/plain;charset=utf-8")  
     public String selectAll(HttpServletRequest request) throws Exception{  	
-    	request.setCharacterEncoding("utf-8");    	
+    	request.setCharacterEncoding("utf-8");  
+    	String pageString = request.getParameter("page");
+    	String limitString = request.getParameter("limit");
+    	System.out.println(pageString + " "+limitString);
     	List<Login> logins = loginService.selectAll();
-      	JSONObject jsonObject = new JSONObject();
-      	String jString =jsonObject.toJSONString(logins);
-      	System.out.println(jString);
       	String[] colums = {"id","userName","password"};
     	String data = ObjtoLayJson.ListtoJson(logins, colums);
     	System.out.println(data);
