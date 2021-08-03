@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +28,23 @@ public class LoginController {
 	private ILoginService loginService;     
     
     // /user/test?id=1
-    @RequestMapping(value="/test", method=RequestMethod.GET)  
+    @RequestMapping(value="/back", method=RequestMethod.GET)
     public String test(HttpServletRequest request,Model model){  
         return "back"; 
     }
+
+    @ResponseBody
+	@RequestMapping(value="/login", method=RequestMethod.GET)
+	public String login(HttpServletRequest request){
+    	String userName = request.getParameter("userName");
+    	String password = request.getParameter("password");
+		System.out.println(userName + " " + password);
+		if (loginService.ifLogin(userName,password,request)){
+			return  "{\"data\":\"登录成功\"}";
+		}else {
+			return  "{\"data\":\"登录失败\"}";
+		}
+	}
     
     //返回字符串
     @ResponseBody
@@ -43,9 +57,7 @@ public class LoginController {
     	String[] colums = {"id","userName","password"};
     	String data = ObjtoLayJson.toJson(login, colums);
     	System.out.println(data);
-        return data; 
-        
-        
+        return data;
     }
     
     @ResponseBody
@@ -62,7 +74,7 @@ public class LoginController {
     @RequestMapping(value="/insert", method=RequestMethod.GET,produces = "text/plain;charset=utf-8")  
     public String insert(HttpServletRequest request) {
     	//插入数据库
-    	String usernameString = request.getParameter("username");
+    	String usernameString = request.getParameter("userName");
     	String passwordString = request.getParameter("password");
     	
     	Login login = new Login();
@@ -70,8 +82,7 @@ public class LoginController {
     	login.setUserName(usernameString);
     	
     	loginService.insert(login);
-    	
-    	
+
     	//给前台返回的东西
     	String data = "{\"data\":\"返回成功\"}"; 
         return data; 
@@ -82,7 +93,7 @@ public class LoginController {
     public String update(HttpServletRequest request) {
     	//插入数据库
     	String idString = request.getParameter("id");
-    	String usernameString = request.getParameter("username");
+    	String usernameString = request.getParameter("userName");
     	String passwordString = request.getParameter("password");
     	Integer idInteger = Integer.valueOf(idString);
     	
@@ -98,20 +109,32 @@ public class LoginController {
     	String data = "{\"data\":\"返回成功\"}"; 
         return data; 
     }
-    
+
+
+	//查询表中有稍等条数据
+	@ResponseBody
+	@RequestMapping(value = "/SelectCount", method = RequestMethod.GET, produces = "text/plain;charset=utf-8")
+	public String SelectCount(HttpServletRequest request) {
+		int count = loginService.SelectCount();
+		System.out.println( "count:" + count );
+		String data = String.valueOf(count);
+		String json= "{"+"\"count\":"+data+"}";
+		return json;
+	}
+
     //返回字符串
     @ResponseBody
     @RequestMapping(value="/selectAll", method=RequestMethod.GET,produces = "text/plain;charset=utf-8")  
-    public String selectAll(HttpServletRequest request) throws Exception{  	
-    	request.setCharacterEncoding("utf-8");  
-    	String pageString = request.getParameter("page");
-    	String limitString = request.getParameter("limit");
-    	System.out.println(pageString + " "+limitString);
-    	List<Login> logins = loginService.selectAll();
-      	String[] colums = {"id","userName","password"};
-    	String data = ObjtoLayJson.ListtoJson(logins, colums);
-    	System.out.println(data);
-        return data; 
+    public String selectAll(HttpServletRequest request) throws Exception{
+		String pageString = request.getParameter("page");
+		String limitString = request.getParameter("limit");
+		Integer pageInteger = Integer.valueOf(pageString);
+		Integer limitInteger = Integer.valueOf(limitString);
+		System.out.println(pageString + limitString);
+		List<Login> listsList = loginService.selectAll(pageInteger,limitInteger);
+		String[] colums = { "id", "userName", "password"};
+		String data = ObjtoLayJson.ListtoJson(listsList, colums);
+		return data;
     }
    
 }  

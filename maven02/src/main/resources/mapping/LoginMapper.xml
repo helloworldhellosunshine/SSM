@@ -11,6 +11,10 @@
   <sql id="Base_Column_List" >
    	id,userName,password
   </sql>
+
+    <select id="login" resultType="com.javen.model.Login" parameterType="java.lang.String">
+        select * from login where userName = #{0} and password = #{1}
+    </select>
   
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -19,13 +23,6 @@
     from login
     where id = #{id,jdbcType=INTEGER}
   </select>
-  
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select 
-    <include refid="Base_Column_List" />
-    from login
-  </select>
-
 
    <delete id="deleteByPrimaryKey"  parameterType="java.lang.Integer">
     delete from login
@@ -43,5 +40,16 @@
       password = #{password,jdbcType=VARCHAR}
       where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="SelectCount"  resultType="java.lang.Integer" >
+         SELECT count(*) FROM login;
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap"  parameterType="java.lang.Integer">
+        select * from login limit #{param1},#{param2}
+    </select>
+
+
+
 
 </mapper>

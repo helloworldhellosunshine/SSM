@@ -3,7 +3,9 @@ package com.javen.service;
 import java.util.List;
 
 import com.javen.model.Login;
+import com.javen.model.User;
 
+import javax.servlet.http.HttpServletRequest;
 
 
 public interface ILoginService {
@@ -16,7 +18,13 @@ public interface ILoginService {
 	 public int insert(Login login);
 	 
 	 public int updateByPrimaryKey(Login login);
-	 
-	 public List<Login> selectAll();
+
+	 public List<Login> selectAll(int pageInteger,int limitInteger);
+
+	 Boolean ifLogin(String userName, String password, HttpServletRequest request);
+
+	 public int SelectCount();
+
+
 	 
 }

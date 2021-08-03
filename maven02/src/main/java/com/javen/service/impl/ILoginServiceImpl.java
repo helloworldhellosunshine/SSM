@@ -3,7 +3,10 @@ package com.javen.service.impl;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import com.javen.model.User;
 import org.springframework.stereotype.Service;
 
 import com.javen.dao.LoginDao;
@@ -38,9 +41,39 @@ public class ILoginServiceImpl implements ILoginService{
 		return this.loginDao.updateByPrimaryKey(login);
 	}
 
-	public List<Login> selectAll() {
-		// TODO Auto-generated method stub
-		return this.loginDao.selectAll();
+	/*
+	 * pageInteger:代表我们现在在第几页上
+	 * limitInteger：每页的个数
+	 * (non-Javadoc)
+	 * @see com.javen.service.IRegistService#selectAll(int, int)
+	 */
+
+	public List<Login> selectAll(int pageInteger, int limitInteger) {
+
+		int pageIndex = (pageInteger-1) * limitInteger;
+		int pageSize = limitInteger;
+
+		return this.loginDao.selectAll(pageIndex, pageSize);
 	}
+
+
+	public Boolean ifLogin(String userName, String password, HttpServletRequest request) {
+
+		List<Login> users = loginDao.login(userName,password);
+		if (users.size() == 1){
+			HttpSession session = request.getSession();
+			session.setAttribute("user",users.get(0));
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public int SelectCount() {
+		// TODO Auto-generated method stub
+		return this.loginDao.SelectCount();
+	}
+
+
 
 }
