@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.javen.model.User;
 import org.springframework.stereotype.Service;
 
 import com.javen.dao.LoginDao;

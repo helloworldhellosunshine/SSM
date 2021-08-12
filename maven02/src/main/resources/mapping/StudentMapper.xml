@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javen.dao.StudentDao" >
+
+    <!--    多对一查询：查询每个学生所对应的老师-->
+
+
+    <!--第一种形式：按照查询嵌套处理-->
+    <!--
+        1.查询所有的学生信息
+        2.根据查询出来的t_id,寻找对应的老师
+     -->
+    <!--    注意学生实体类当中要有老师类的对象才能实现关联查询-->
+    <!--  resultMap:返回关联的结果映射-->
+    <select id = "getStudent"  resultMap="StudentTeacher">
+        select * from student;
+    </select>
+    <!--结果映射集-->
+    <resultMap id="StudentTeacher" type="com.javen.model.Student">
+        <result property="id" column="id"/>
+        <result property="studentName" column="studentName"/>
+        <result property="t_id" column="t_id"/>
+        <!-- 复杂的属性我么需要单独去处理 对象:association   集合：collection   -->
+        <!-- property="teacher" student类当中的关联字段 -->
+        <!-- column="t_id" 两个表的外键-->
+        <!-- javaType="com.javen.model.Teacher" 为复杂属性设置类类型-->
+        <!-- select="getTeacher"  :调用下一个查询语句       -->
+        <association property="teacher" column="t_id" javaType="com.javen.model.Teacher" select="getTeacher"/>
+    </resultMap>
+
+    <select id="getTeacher" resultType="com.javen.model.Teacher">
+        select  * from  teacher where id = #{id};    <!-- #{id}; 可以写任何东西，因为会自动匹配 t_id -->
+    </select>
+
+
+    <!--    按照结果嵌套处理-->
+    <select id="getStudent1" resultMap="StudentTeacher1">
+        SELECT  student.id,student.studentName,student.t_id,teacher.teacherName FROM student  LEFT JOIN teacher  on student.t_id = teacher.id    </select>
+    <resultMap id="StudentTeacher1" type="com.javen.model.Student">
+        <result property="id" column="id"/>
+        <result property="studentName" column="studentName"/>
+        <result property="t_id" column="t_id"/>
+        <association property="teacher" javaType="com.javen.model.Teacher">
+            <result property="id" column="id"/>
+            <result property="teacherName" column="teacherName"/>
+        </association>
+    </resultMap>
+
+</mapper>

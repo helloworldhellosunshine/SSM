@@ -1,7 +1,6 @@
 package com.javen.dao;
 
 import com.javen.model.Login;
-import com.javen.model.User;
 
 
 import java.util.List;
