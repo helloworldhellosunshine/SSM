@@ -3,11 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>Layui</title>
-
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <link rel="stylesheet" href="../sources/layui/css/layui.css"  media="all">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
@@ -18,39 +17,56 @@
     <div class="layui-form-item">
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
-            <input type="text" id="userName" name="userName" lay-verify="title" autocomplete="off" placeholder="用户名" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">密码</label>
-        <div class="layui-input-block">
-            <input type="text" id="password" name="password" lay-verify="title" autocomplete="off" placeholder="密码" class="layui-input">
+            <input type="text" id ="username" name="username" lay-verify="title" autocomplete="off" placeholder="用户名" class="layui-input">
         </div>
     </div>
 
-    <div class="layui-form-item" id="sub">
-        <button  class="layui-btn" type="button" lay-submit lay-filter="demo2" id="addsub">提交</button>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="text" id="password" name="password" lay-verify="description" autocomplete="off" placeholder="密码" class="layui-input">
+        </div>
     </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">age</label>
+        <div class="layui-input-block">
+            <input type="text" id="age" name="age" lay-verify="description" autocomplete="off" placeholder="年龄" class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item" id="sub">
+        <button style="" class="layui-btn" type="button" lay-submit lay-filter="insert" id="addsub">提交</button>
+    </div>
+
 </form>
 
 <!--修改的from表单 -->
-<form class="layui-form"  id="updataForm" style="display:none" lay-filter="updata" enctype="multipart/form-data">
-    <div class="layui-form-item" style="display:none">
+<form class="layui-form" action="" id="updataForm" style="display:none" lay-filter="updata" enctype="multipart/form-data">
+    <div class="layui-form-item" >
         <label class="layui-form-label">id</label>
         <div class="layui-input-block">
-            <input type="text" id="id" name="id" lay-verify="id" autocomplete="off" placeholder="用户名" class="layui-input">
+            <input type="text" id="id" name="id" lay-verify="id" autocomplete="off" placeholder="用户id" class="layui-input">
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" >
         <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
-            <input type="text" id="userName" name="userName" lay-verify="userName" autocomplete="off" placeholder="用户名" class="layui-input">
+            <input type="text" id="username" name="username" lay-verify="username" autocomplete="off" placeholder="用户名" class="layui-input">
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" >
         <label class="layui-form-label">密码</label>
         <div class="layui-input-block">
             <input type="text" id="password" name="password" lay-verify="password" autocomplete="off" placeholder="密码" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item" >
+        <label class="layui-form-label">年龄</label>
+        <div class="layui-input-block">
+            <input type="text" id="age" name="age" lay-verify="age" autocomplete="off" placeholder="年龄" class="layui-input">
         </div>
     </div>
 
@@ -58,7 +74,6 @@
         <button style="" class="layui-btn" type="button" lay-submit lay-filter="demo3" id="updatasub">提交</button>
     </div>
 </form>
-
 
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
@@ -72,8 +87,8 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="delete">删除</a>
 </script>
 
 
@@ -84,24 +99,24 @@
     layui.use('table', function(){
         var table = layui.table;
 
-        var pagecount;
-        page();
-        function page(){
+        var pageCount;
+        getCount();
+        function getCount(){
             $.ajax({
-                url: 'http://localhost:8080//maven02/login/SelectCount',
-                dataType: 'json',
-                type: 'get',
-                async:false,
-                success: function(data) {
-                    pagecount = data.count;
-                    console.log(pagecount)
+                url:'http://localhost:8080/maven02/user/selectCount',
+                method:'get',
+                dataType:'JSON',
+                success:function(res){
+                    pageCount = res.count;
+                    console.log(pageCount)
                 }
-            });
+            }) ;
+
         }
 
         table.render({
             elem: '#test'
-            ,url:'http://localhost:8080/maven02/login/selectAll'
+            ,url:'http://localhost:8080/maven02/user/findAll'
             ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
             ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                 title: '提示'
@@ -112,8 +127,9 @@
             ,cols: [[
                 {type: 'checkbox', fixed: 'left'}
                 ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-                ,{field:'userName', title:'用户名', width:120, edit: 'text'}
-                ,{field:'password', title:'密码', width:120, edit: 'text'}
+                ,{field:'username', title:'用户名', width:120, edit: 'text'}
+                ,{field:'password', title:'密码', width:120, edit: 'text', sort: true}
+                ,{field:'age', title:'年龄', width:120, edit: 'text', sort: true}
                 ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
             ]]
             ,page: true
@@ -123,10 +139,10 @@
             }
             ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                 return {
-                    "status": res[0].status,   //解析接口状态
-                    "message":res[1].message,  //解析提示文本
-                    "count": pagecount,       //解析数据长度
-                    "rows": res[3].rows.item  //解析数据列表
+                    "status": res.status,   //解析接口状态
+                    "message":res.message,  //解析提示文本
+                    "count": pageCount,       //解析数据长度
+                    "rows": res.rows  //解析数据列表
                 };
             }
         });
@@ -149,7 +165,6 @@
                 case 'add':
                     add();
                     break;
-
                 //自定义头工具栏右侧图标 - 提示
                 case 'LAYTABLE_TIPS':
                     layer.alert('这是工具栏右侧自定义的一个图标按钮');
@@ -157,6 +172,7 @@
             };
         });
 
+        // 打开添加弹窗
         function add(){
             layer_index= layer.open({
                 type: 1,  //可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
@@ -172,98 +188,30 @@
             });
             //刷新页面
             table.reload('test', {
-                url: 'http://localhost:8080/maven02/login/selectAll'
+                url: 'http://localhost:8080/maven02/user/findAll'
             });
         }
-
-
-        //引入from表单
-        layui.use(['form', 'laydate'], function(){
-            form = layui.form;
-            form.render();
-
-            //表单取值
-            form.on('submit(demo2)', function(data){
-                console.log(JSON.stringify(data.field));
-                $.ajax({
-                    url:'http://localhost:8080/maven02/login/insert',
-                    method:'get',
-                    data:data.field,
-                    dataType:'JSON',
-                    success:function(res){
-                        if(res.status='0'){
-                            console.log(res);
-                            layer.msg("添加成功");
-                            $("#addForm")[0].reset();
-                            form.render();
-
-                            page();
-                        }else{
-                            layer.msg("添加失败");
-                            $("#addForm")[0].reset();
-                            form.render();
-                        }
-                    },
-                    error:function (data) {
-                        layer.msg("网络错误");
-                        $("#addForm")[0].reset();
-                        form.render();
-                    }
-                }) ;
-                layer.close(layer_index);
-            });
-
-            form.on('submit(demo3)', function(data){
-                $.ajax({
-                    url:'http://localhost:8080/maven02/login/update',
-                    method:'get',
-                    data:data.field,
-                    dataType:'JSON',
-                    success:function(res){
-                        if(res.status='0'){
-                            console.log(res);
-                            layer.msg("添加成功");
-                            $("#updataForm")[0].reset();
-                            form.render();
-                            //刷新页面
-                            table.reload('test', {
-                                url: 'http://localhost:8080/maven02/login/selectAll'
-                            });
-                            page();
-                        }else{
-                            layer.msg("添加失败");
-                            $("#updataForm")[0].reset();
-                            form.render();
-                        }
-                    },
-                    error:function (data) {
-                        layer.msg("网络错误");
-                        $("#updataForm")[0].reset();
-                        form.render();
-                    }
-                }) ;
-                layer.close(layer_index);
-            });
-
-        });
 
         //监听行工具事件
         table.on('tool(test)', function(obj){
             var data = obj.data;
-            //console.log(obj)
-            if(obj.event === 'del'){
-                layer.confirm('真的删除行么', function(index){
-                    obj.del();
-                    deleteById(data.id);
+
+            if(obj.event === 'delete'){
+                layer.confirm('真的删除吗', function(index){
+
+                    deleteById (data.id);
                     layer.close(index);
                 });
             } else if(obj.event === 'edit'){
                 form.val("updata", { //formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
                     "id": data.id // "name": "value"
-                    ,"userName":data.userName
+                    ,"username":data.username
                     ,"password": data.password
+                    ,"age": data.age
                 });
+
                 updateById(data);
+
             }
         });
 
@@ -286,21 +234,22 @@
 
         }
 
-
-
         //删除
         function deleteById(index){
 
-            var url = "http://localhost:8080/maven02/login/deleteByPrimaryKey";
+            var url = "/maven02/user/deleteById";
             $.ajax({
                 type: "get", //指定提交的类型 get对应 doGet()方法，post--->doPost()犯法
                 url: url,    //传输地址的URL
                 data: {"id":index}, //data代表我们的数据  key -value类型的数据
                 dataType:'JSON',
-                async : false, //success和error代表是否返回成功，既后台给前台传输数据是否成功
                 success: function (res)
                 {
-
+                    if (res.status == 0){
+                        table.reload('test', {
+                            url: 'http://localhost:8080/maven02/user/findAll'
+                        });
+                    }
                 },
                 error:function (XMLHttpRequest, textStatus, errorThrown) {
                     alert(typeof(errorThrown));
@@ -308,6 +257,80 @@
             });
         }
 
+
+        //引入from表单
+        layui.use(['form', 'laydate'], function(){
+            form = layui.form;
+            form.render();
+
+            //表单取值
+            form.on('submit(insert)', function(data){
+                console.log(JSON.stringify(data.field));
+                $.ajax({
+                    url:'/maven02/user/insert',
+                    method:'get',
+                    data:data.field,
+                    dataType:'JSON',
+                    success:function(res){
+                        if(res.status='0'){
+                            layer.msg("添加成功");
+                            $("#addForm")[0].reset();
+                            form.render();
+                            //刷新页面
+                            table.reload('test', {
+                                url: 'http://localhost:8080/maven02/user/findAll'
+                            });
+                            getCount();
+                        }else{
+                            layer.msg("添加失败");
+                            $("#addForm")[0].reset();
+                            form.render();
+                        }
+                    },
+                    error:function (data) {
+                        layer.msg("网络错误");
+                        $("#addForm")[0].reset();
+                        form.render();
+                    }
+                }) ;
+                layer.close(layer_index);
+            });
+
+            form.on('submit(demo3)', function(data){
+                console.log(JSON.stringify(data.field));
+                $.ajax({
+                    url:'/maven02/user/update',
+                    method:'get',
+                    data:data.field,
+                    dataType:'JSON',
+                    success:function(res){
+                        if(res.status='0'){
+                            console.log(res);
+                            layer.msg("修改成功");
+                            $("#updataForm")[0].reset();
+                            form.render();
+                            //刷新页面
+                            table.reload('test', {
+                                url: 'http://localhost:8080/maven02/user/findAll'
+                            });
+                            getCount();
+                        }else{
+                            layer.msg("修改失败");
+                            $("#updataForm")[0].reset();
+                            form.render();
+                        }
+                    },
+                    error:function (data) {
+                        layer.msg("网络错误");
+                        $("#updataForm")[0].reset();
+                        form.render();
+                    }
+                }) ;
+                layer.close(layer_index);
+            });
+
+
+        });
 
     });
 </script>

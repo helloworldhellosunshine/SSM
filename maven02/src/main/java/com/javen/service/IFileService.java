@@ -1,11 +1,11 @@
 package com.javen.service;
 
-import com.javen.model.File;
+import com.javen.model.Files;
 
 import java.util.List;
 
 public interface IFileService {
-    public int insert(File file);
+    public int insert(Files file);
 
-    public List<File> show();
+    public List<Files> show();
 }

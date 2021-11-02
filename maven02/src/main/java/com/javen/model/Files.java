@@ -1,6 +1,6 @@
 package com.javen.model;
 
-public class File {
+public class Files {
     private Integer id;
     private String fileName;
 

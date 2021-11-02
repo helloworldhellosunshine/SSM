@@ -3,11 +3,11 @@
 <mapper namespace="com.javen.dao.FileDao" >
 
 
-    <insert id="insert" parameterType="com.javen.model.File" >
+    <insert id="insert" parameterType="com.javen.model.Files" >
         insert into file (fileName) values (#{fileName})
    </insert>
 
-    <select id="show" resultType="com.javen.model.File">
+    <select id="show" resultType="com.javen.model.Files">
         select * from  file;
     </select>
 

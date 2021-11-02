@@ -17,44 +17,6 @@ public class ILoginServiceImpl implements ILoginService{
 
 	@Resource
 	private LoginDao loginDao;
-	
-	
-	
-	public Login selectByPrimaryKey(int id) {
-		// TODO Auto-generated method stub
-		return this.loginDao.selectByPrimaryKey(id);
-	}
-
-	public int deleteByPrimaryKey(int id) {
-		// TODO Auto-generated method stub
-		return this.loginDao.deleteByPrimaryKey(id);
-	}
-
-	public int insert(Login login) {
-		// TODO Auto-generated method stub
-		return this.loginDao.insert(login);
-	}
-
-	public int updateByPrimaryKey(Login login) {
-		// TODO Auto-generated method stub
-		return this.loginDao.updateByPrimaryKey(login);
-	}
-
-	/*
-	 * pageInteger:代表我们现在在第几页上
-	 * limitInteger：每页的个数
-	 * (non-Javadoc)
-	 * @see com.javen.service.IRegistService#selectAll(int, int)
-	 */
-
-	public List<Login> selectAll(int pageInteger, int limitInteger) {
-
-		int pageIndex = (pageInteger-1) * limitInteger;
-		int pageSize = limitInteger;
-
-		return this.loginDao.selectAll(pageIndex, pageSize);
-	}
-
 
 	public Boolean ifLogin(String userName, String password, HttpServletRequest request) {
 
@@ -68,10 +30,7 @@ public class ILoginServiceImpl implements ILoginService{
 		}
 	}
 
-	public int SelectCount() {
-		// TODO Auto-generated method stub
-		return this.loginDao.SelectCount();
-	}
+
 
 
 

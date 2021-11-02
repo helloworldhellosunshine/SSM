@@ -1,7 +1,7 @@
 package com.javen.controller;
 
+import com.javen.model.Files;
 import com.javen.service.IFileService;
-import com.javen.util.ObjtoLayJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -23,14 +24,16 @@ public class FileController {
     @Autowired
     private IFileService iFileService;
 
-    @RequestMapping(value="/show",method= RequestMethod.GET)
     @ResponseBody
-    public String showfile(HttpServletRequest request) throws Exception {
-        List<com.javen.model.File> files = iFileService.show();
-        String[] colums = {"id","fileName"};
-        String data = ObjtoLayJson.ListtoJson(files,colums);
-        System.out.println(data);
-        return data;
+    @RequestMapping("/show")
+    public Map<String,Object> show(){
+        List<Files> files =  iFileService.show();
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("rows",files);
+        map.put("count",100);
+        map.put("massage","成功");
+        map.put("status","0");
+        return map;
     }
 
 
@@ -61,7 +64,7 @@ public class FileController {
         file.transferTo(newFile);
 
         //设置到数据库当中
-        com.javen.model.File file1 = new com.javen.model.File();
+        Files file1 = new Files();
         file1.setFileName(originalFileName);
         iFileService.insert(file1);
 
